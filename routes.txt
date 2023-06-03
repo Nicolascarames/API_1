@@ -1,0 +1,6 @@
+Routes:
+
+1- GET  /users         -- all users
+2- GET  /user/:id      -- user profile
+3- POST /users         -- new user
+4- POST /login         -- login user (back token)
