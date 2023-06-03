@@ -9,7 +9,13 @@ const port = 3000;
 app.use(morgan("dev"));
 app.use(express.json());
 
-const { newUser, login, getUser, getUsers } = require("./controllers/users");
+const { newUser, login, getUser } = require("./controllers/users");
+const { authUser } = require("./middlewares/auth");
+const {
+  newComent,
+  getComents,
+  getComentsById,
+} = require("./controllers/coments");
 
 // Home
 app.get("/", async (req, res) => {
@@ -17,24 +23,30 @@ app.get("/", async (req, res) => {
 });
 
 //routes
-app.get("/users", getUsers);
-app.get("/user/:id", getUser);
-app.post("/user", newUser);
+app.post("/newuser", newUser);
 app.post("/login", login);
+app.get("/user", authUser, getUser);
+app.get("/user/:username", authUser, getUser);
+app.post("/post", authUser, newComent);
+app.get("/coments", getComents);
+app.get("/comentsuser/:id", getComentsById);
 
 // Página no encontrada - 404 page
 app.use((req, res) => {
-  res.type("text/plain");
-  res.status(404);
-  res.send("404 - Not Found");
+  res.status(404).send({
+    status: 404,
+    message: "Not found",
+  });
 });
 
 // Página de error en el servidor - 500 page
-app.use((err, req, res, next) => {
-  console.error(err.message);
-  res.type("text/plain");
-  res.status(500);
-  res.send("500 - Server Error");
+app.use((error, req, res, next) => {
+  console.error(error.message);
+  console.error(error);
+  res.status(error.httpStatus || 500).send({
+    status: "error",
+    message: error.message,
+  });
 });
 
 app.listen(port, () =>
