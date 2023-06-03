@@ -2,12 +2,10 @@ const express = require("express");
 const fs = require("fs");
 const path = require("path");
 const morgan = require("morgan");
+const fileUpload = require("express-fileupload");
 
 const app = express();
 const port = 3000;
-
-app.use(morgan("dev"));
-app.use(express.json());
 
 const { newUser, login, getUser } = require("./controllers/users");
 const { authUser } = require("./middlewares/auth");
@@ -15,7 +13,12 @@ const {
   newComent,
   getComents,
   getComentsById,
+  deleteComentsById,
 } = require("./controllers/coments");
+
+app.use(morgan("dev"));
+app.use(express.json());
+app.use(fileUpload());
 
 // Home
 app.get("/", async (req, res) => {
@@ -30,6 +33,7 @@ app.get("/user/:username", authUser, getUser);
 app.post("/post", authUser, newComent);
 app.get("/coments", getComents);
 app.get("/comentsuser/:id", getComentsById);
+app.delete("/comentsuser/:id", authUser, deleteComentsById);
 
 // Página no encontrada - 404 page
 app.use((req, res) => {

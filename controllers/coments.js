@@ -1,6 +1,8 @@
+const sharp = require("sharp");
 const { newComentDb } = require("../db/comentsDb");
 const getDB = require("../db/getDb");
-const { generateError } = require("../helpers");
+const { generateError, createPathIfNotExist } = require("../helpers");
+const path = require("path");
 
 const newComent = async (req, res, next) => {
   try {
@@ -10,7 +12,23 @@ const newComent = async (req, res, next) => {
       throw generateError("No text or text.length > 999", 400);
     }
 
-    const id = await newComentDb(req.userId, text);
+    let imageFileName;
+
+    if (req.files && req.files.image) {
+      //creo el path del directorio uploads
+      console.log(req.files);
+      const uploadsDir = path.join(__dirname, "../uploads");
+      //creo el dir si no existe
+      await createPathIfNotExist(uploadsDir);
+      //procesar imagen
+      const image = sharp(req.files.image.data);
+      image.resize(1000);
+      //guardo la imagen con un nombre aleatorio en el dir uploads
+      imageFileName = `${req.files.image.md5}${req.files.image.name}`;
+      await image.toFile(path.join(uploadsDir, imageFileName));
+    }
+
+    const id = await newComentDb(req.userId, text, imageFileName);
 
     res.send({
       status: "ok",
@@ -69,8 +87,38 @@ const getComentsById = async (req, res, next) => {
   }
 };
 
+const deleteComentsById = async (req, res, next) => {
+  const { id } = req.params;
+  const idUser = req.userId;
+  let connection;
+  try {
+    // Conseguimos una conexión con la base de datos
+    connection = await getDB();
+
+    // El primer elemento del array que nos devuelve es el resultado de nuestra query
+    const [resp] = await connection.query(
+      `SELECT * FROM coments WHERE iduser=?`,
+      [idUser]
+    );
+
+    if (resp.length === 0) {
+      throw generateError(`No coments with userId: ${id}`, 404);
+    }
+
+    //Enviamos la respuesta en un objeto
+    res.send({ status: "ok", data: resp });
+  } catch (error) {
+    next(error);
+    console.error(error);
+  } finally {
+    // Siempre liberamos la conexión tanto si la consulta es satisfactoria o si hubo un error
+    if (connection) connection.release();
+  }
+};
+
 module.exports = {
   newComent,
   getComents,
   getComentsById,
+  deleteComentsById,
 };
