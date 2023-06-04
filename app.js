@@ -5,8 +5,6 @@ const morgan = require("morgan");
 const fileUpload = require("express-fileupload");
 const cors = require("cors");
 
-app.use(cors());
-
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -24,6 +22,7 @@ const {
   allScoresEmoji,
 } = require("./controllers/scoresEmojis");
 
+app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(fileUpload());
