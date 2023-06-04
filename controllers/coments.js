@@ -13,11 +13,12 @@ const newComent = async (req, res, next) => {
     }
 
     let imageFileName;
+    let uploadsDir;
 
     if (req.files && req.files.image) {
       //creo el path del directorio uploads
       console.log(req.files);
-      const uploadsDir = path.join(__dirname, "../uploads");
+      uploadsDir = path.join(__dirname, "../uploads");
       //creo el dir si no existe
       await createPathIfNotExist(uploadsDir);
       //procesar imagen
