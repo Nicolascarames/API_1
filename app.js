@@ -15,6 +15,11 @@ const {
   getComentsById,
   deleteComentsById,
 } = require("./controllers/coments");
+const {
+  createUserEmoji,
+  createScoreEmoji,
+  allScoresEmoji,
+} = require("./controllers/scoresEmojis");
 
 app.use(morgan("dev"));
 app.use(express.json());
@@ -34,6 +39,11 @@ app.post("/post", authUser, newComent);
 app.get("/coments", getComents);
 app.get("/comentsuser/:id", getComentsById);
 app.delete("/comentsuser/:id", authUser, deleteComentsById);
+
+//routes scores
+app.post("/createUserEmoji", createUserEmoji);
+app.post("/createScoreEmoji", createScoreEmoji);
+app.get("/allScoresEmoji", allScoresEmoji);
 
 // Página no encontrada - 404 page
 app.use((req, res) => {

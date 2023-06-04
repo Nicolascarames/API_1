@@ -89,7 +89,7 @@ const getComentsById = async (req, res, next) => {
 
 const deleteComentsById = async (req, res, next) => {
   const { id } = req.params;
-  const idUser = req.userId;
+  const userId = req.userId;
   let connection;
   try {
     // Conseguimos una conexión con la base de datos
@@ -97,16 +97,22 @@ const deleteComentsById = async (req, res, next) => {
 
     // El primer elemento del array que nos devuelve es el resultado de nuestra query
     const [resp] = await connection.query(
-      `SELECT * FROM coments WHERE iduser=?`,
-      [idUser]
+      `SELECT * FROM coments WHERE idcoments=?`,
+      [id]
     );
 
     if (resp.length === 0) {
-      throw generateError(`No coments with userId: ${id}`, 404);
+      throw generateError(`No coments with Id: ${id}`, 404);
     }
 
+    if (userId !== resp[0].iduser) {
+      throw generateError(`Can't delete coment, not yours`, 401);
+    }
+
+    await connection.query(`DELETE FROM coments WHERE idcoments=?`, [id]);
+
     //Enviamos la respuesta en un objeto
-    res.send({ status: "ok", data: resp });
+    res.send({ status: "ok", data: `Coment with id: ${id}, delete succesful` });
   } catch (error) {
     next(error);
     console.error(error);
