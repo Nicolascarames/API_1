@@ -89,7 +89,7 @@ const login = async (req, res, next) => {
 
     res.send({
       status: "ok",
-      data: token,
+      token: token,
       userId: user.id,
       email: user.email,
       username: user.username,
