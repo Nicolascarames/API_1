@@ -7,6 +7,11 @@ require("dotenv").config();
 // Hacemos destructuring de las variables de entorno que vamos a necesitar
 const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_PORT } =
   process.env;
+// const MYSQL_HOST = process.env.MYSQL_HOST ||
+// const MYSQL_HOST = process.env.MYSQL_HOST ||
+// const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD ||
+// const MYSQL_DATABASE = process.env.MYSQL_DATABASE ||
+// const MYSQL_PORT = process.env.MYSQL_PORT ||
 // console.log(MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE);
 
 // Creamos una variable donde se almacenará el grupo de conexiones
