@@ -28,7 +28,8 @@ const newComent = async (req, res, next) => {
       await image.toFile(path.join(uploadsDir, imageFileName));
     }
 
-    const id = await newComentDb(req.userId, text, imageFileName);
+    const urlimage = path.join(uploadsDir, imageFileName);
+    const id = await newComentDb(req.userId, text, imageFileName, urlimage);
 
     res.send({
       status: "ok",
