@@ -18,6 +18,7 @@ const newUser = async (req, res, next) => {
     res.send({
       status: "ok",
       message: `User created with id: ${id}`,
+      userId: id,
     });
   } catch (error) {
     next(error);
@@ -89,6 +90,9 @@ const login = async (req, res, next) => {
     res.send({
       status: "ok",
       data: token,
+      userId: user.id,
+      email: user.email,
+      username: user.username,
     });
   } catch (error) {
     next(error);
