@@ -29,12 +29,13 @@ const newComent = async (req, res, next) => {
       await image.toFile(path.join(uploadsDir, imageFileName));
     }
 
-    const urlimage = path.join(uploadsDir, imageFileName);
+    const urlimage = path.join(__dirname, "../uploads", imageFileName);
     const id = await newComentDb(req.userId, text, imageFileName, urlimage);
 
     res.send({
       status: "ok",
       message: `New coment add with id:${id} from user id:${req.userId}`,
+      image: urlimage,
     });
   } catch (error) {
     next(error);
