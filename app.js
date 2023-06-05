@@ -6,8 +6,8 @@ const fileUpload = require("express-fileupload");
 const cors = require("cors");
 
 const app = express();
-const port = process.env.PORT || 3000;
-// const port = 3000;
+// const port = process.env.PORT || 3000;
+const port = 3000;
 
 const { newUser, login, getUser } = require("./controllers/users");
 const { authUser } = require("./middlewares/auth");
@@ -23,13 +23,14 @@ const {
   allScoresEmoji,
 } = require("./controllers/scoresEmojis");
 
+app.use("/ficheros", express.static(path.join(__dirname, "./uploads")));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 app.use(fileUpload());
 
 // Home
-app.get("/", async (req, res) => {
+app.use("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "./routes.txt"));
 });
 
