@@ -21,6 +21,7 @@ const {
   createUserEmoji,
   createScoreEmoji,
   allScoresEmoji,
+  newPuntuacion,
 } = require("./controllers/scoresEmojis");
 
 app.use("/ficheros", express.static(path.join(__dirname, "./uploads")));
@@ -30,7 +31,7 @@ app.use(express.json());
 app.use(fileUpload());
 
 // Home
-app.use("/", async (req, res) => {
+app.get("/", async (req, res) => {
   res.sendFile(path.join(__dirname, "./routes.txt"));
 });
 
@@ -48,6 +49,7 @@ app.delete("/comentsuser/:id", authUser, deleteComentsById);
 app.post("/createUserEmoji", createUserEmoji);
 app.post("/createScoreEmoji", createScoreEmoji);
 app.get("/allScoresEmoji", allScoresEmoji);
+app.post("/newpuntuacion", newPuntuacion);
 
 // Página no encontrada - 404 page
 app.use((req, res) => {

@@ -1,19 +1,48 @@
 const getDB = require("../db/getDb");
 
+const newPuntuacion = async (req, res, next) => {
+  let connection;
+
+  try {
+    connection = await getDB();
+    const { nombre, puntuacion, intentos, tiempo, ultima } = req.body;
+
+    if (!nombre && !puntuacion) {
+      throw generateError("nombre missing", 400);
+    }
+
+    const [newUser] = await connection.query(
+      `INSERT INTO puntuaciones (nombre, puntuacion, intentos, tiempo, ultima) VALUES (?,?,?,?,?)`,
+      [nombre, puntuacion, intentos, tiempo, ultima]
+    );
+
+    res.send({
+      status: "ok",
+      message: `Created newPuntuacion with id: ${newUser.insertId}`,
+    });
+
+    return newUser.insertId;
+  } catch (error) {
+    next(error);
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
 const createUserEmoji = async (req, res, next) => {
   let connection;
 
   try {
     connection = await getDB();
-    const { username } = req.body;
+    const { nombre } = req.body;
 
-    if (!username) {
-      throw generateError("Username missing", 400);
+    if (!nombre) {
+      throw generateError("nombre missing", 400);
     }
 
     const [newUser] = await connection.query(
-      `INSERT INTO puntuaciones (username) VALUES (?)`,
-      [username]
+      `INSERT INTO puntuaciones (nombre) VALUES (?)`,
+      [nombre]
     );
 
     res.send({
@@ -65,7 +94,7 @@ const allScoresEmoji = async (req, res, next) => {
     connection = await getDB();
 
     const [allScores] = await connection.query(
-      `SELECT username, puntuacion, create_at FROM puntuaciones`
+      `SELECT nombre, puntuacion, create_at, intentos, tiempo, ultima FROM puntuaciones`
     );
 
     res.send({
@@ -83,4 +112,5 @@ module.exports = {
   createScoreEmoji,
   createUserEmoji,
   allScoresEmoji,
+  newPuntuacion,
 };
