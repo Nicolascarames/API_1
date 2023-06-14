@@ -17,7 +17,7 @@ const newComent = async (req, res, next) => {
 
     if (req.files && req.files.image) {
       //creo el path del directorio uploads
-      console.log(req.files);
+      // console.log(req.files);
       uploadsDir = path.join(__dirname, "../uploads");
       //creo el dir si no existe
       await createPathIfNotExist(uploadsDir);
@@ -29,13 +29,11 @@ const newComent = async (req, res, next) => {
       await image.toFile(path.join(uploadsDir, imageFileName));
     }
 
-    const urlimage = path.join(__dirname, "../uploads", imageFileName);
-    const id = await newComentDb(req.userId, text, imageFileName, urlimage);
+    const id = await newComentDb(req.userId, text, imageFileName);
 
     res.send({
       status: "ok",
       message: `New coment add with id:${id} from user id:${req.userId}`,
-      image: urlimage,
     });
   } catch (error) {
     next(error);

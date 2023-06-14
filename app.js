@@ -24,7 +24,7 @@ const {
   newPuntuacion,
 } = require("./controllers/scoresEmojis");
 
-app.use("/ficheros", express.static(path.join(__dirname, "./uploads")));
+app.use("/uploads", express.static("./uploads"));
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());

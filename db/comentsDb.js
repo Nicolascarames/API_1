@@ -1,12 +1,12 @@
 const getDB = require("./getDb");
 
-const newComentDb = async (userId, text, image = "", urlimage = "") => {
+const newComentDb = async (userId, text, image = "") => {
   let connection;
   try {
     connection = await getDB();
     const [result] = await connection.query(
-      `INSERT INTO coments (iduser, text, image, urlimage) VALUES (?,?,?,?)`,
-      [userId, text, image, urlimage]
+      `INSERT INTO coments (iduser, text, image) VALUES (?,?,?)`,
+      [userId, text, image]
     );
 
     return result.insertId;
