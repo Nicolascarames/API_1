@@ -5,7 +5,7 @@ const newComentDb = async (userId, text, image = "") => {
   try {
     connection = await getDB();
     const [result] = await connection.query(
-      `INSERT INTO coments (iduser, text, image) VALUES (?,?,?)`,
+      `INSERT INTO coments (userId, text, image) VALUES (?,?,?)`,
       [userId, text, image]
     );
 

@@ -5,8 +5,7 @@ const mysql = require("mysql2/promise");
 require("dotenv").config();
 
 // Hacemos destructuring de las variables de entorno que vamos a necesitar
-const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE, MYSQL_PORT } =
-  process.env;
+const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } = process.env;
 // const MYSQL_HOST = process.env.MYSQL_HOST ||
 // const MYSQL_HOST = process.env.MYSQL_HOST ||
 // const MYSQL_PASSWORD = process.env.MYSQL_PASSWORD ||
@@ -29,7 +28,7 @@ const getDB = async () => {
       user: MYSQL_USER,
       password: MYSQL_PASSWORD,
       database: MYSQL_DATABASE,
-      port: MYSQL_PORT,
+
       // Usamos el horario Zulú para fechas y horas estándar
       timezone: "Z",
     });

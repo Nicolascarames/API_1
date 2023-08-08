@@ -69,7 +69,7 @@ const getComentsById = async (req, res, next) => {
 
     // El primer elemento del array que nos devuelve es el resultado de nuestra query
     const [resp] = await connection.query(
-      `SELECT idcoments, text, iduser, create_at FROM coments WHERE iduser=?`,
+      `SELECT id, text, userId, create_at FROM coments WHERE userId=?`,
       [id]
     );
 
@@ -97,10 +97,9 @@ const deleteComentsById = async (req, res, next) => {
     connection = await getDB();
 
     // El primer elemento del array que nos devuelve es el resultado de nuestra query
-    const [resp] = await connection.query(
-      `SELECT * FROM coments WHERE idcoments=?`,
-      [id]
-    );
+    const [resp] = await connection.query(`SELECT * FROM coments WHERE id=?`, [
+      id,
+    ]);
 
     if (resp.length === 0) {
       throw generateError(`No coments with Id: ${id}`, 404);
