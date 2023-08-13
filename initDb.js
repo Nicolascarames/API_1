@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const getDB = require("./getDb");
+const getDB = require("./db/getDb");
 
 async function main() {
     let conexion;
