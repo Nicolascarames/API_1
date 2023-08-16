@@ -47,7 +47,13 @@ const getComents = async (req, res, next) => {
     connection = await getDB();
 
     // El primer elemento del array que nos devuelve es el resultado de nuestra query
-    const [resp] = await connection.query(`SELECT * FROM coments`);
+    const [resp] = await connection.query(`
+        select c.id, c.userId, c.image, c.text, c.create_at, u.username 
+        from users u, coments c 
+        where u.id = c.userId;
+        `);
+
+    // console.log(resp.map((e) => e.userId));
 
     //Enviamos la respuesta en un objeto
     res.send({ status: "ok", data: resp });
@@ -112,7 +118,10 @@ const deleteComentsById = async (req, res, next) => {
     await connection.query(`DELETE FROM coments WHERE idcoments=?`, [id]);
 
     //Enviamos la respuesta en un objeto
-    res.send({ status: "ok", data: `Coment with id: ${id}, delete succesful` });
+    res.send({
+      status: "ok",
+      data: `Coment with id: ${id}, delete succesful`,
+    });
   } catch (error) {
     next(error);
     console.error(error);
